@@ -19,6 +19,4 @@ const generateFile = (format, content) => {
     return filePath;
 };
 
-module.exports = {
-    generateFile,
-};
+module.exports = generateFile;

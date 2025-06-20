@@ -1,14 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const { generateFile } = require('./generateFile');
-const { executeCode } = require('./executeCpp');
+const { generateFile } = require('./compiler/generateFile');
+const { executeCode } = require('./compiler/executeCpp');
 
 const app = express();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use("/auth",require("./Routes/AuthRouter"));
+app.use("/problems" , require("./Routes/problemRoutes"));
 app.post("/run", async (req, res) => {
     const { language, code } = req.body;
     
@@ -24,6 +25,9 @@ app.post("/run", async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
+
+
+
 
 app.listen(8000, () => {
     console.log('Server running on port 8000');

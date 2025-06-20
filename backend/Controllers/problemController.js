@@ -3,9 +3,10 @@ const Problem = require("../Models/Problem");
 // GET all problems
 exports.getAllProblems = async (req, res) => {
   try {
-    const problems = await Problem.find();
+    const problems = await Problem.find({});
     res.json(problems);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };

@@ -1,7 +1,16 @@
 const { exec } = require('child_process');
+const fs = require('fs');
 const path = require('path');
 
+const outputPath = path.join(__dirname, 'output');
+
+if(!fs.existsSync(outputPath)) {
+    fs.mkdirSync(outputPath, { recursive: true });
+}
+
 const executeCode = (filepath) => {
+    const jobId = path.basename(filepath).split('.')[0];
+    const outPath = path.join(outputPath, `${jobId}.out`);
     return new Promise((resolve, reject) => {
         const ext = path.extname(filepath);
         let command = '';
@@ -28,4 +37,4 @@ const executeCode = (filepath) => {
     });
 };
 
-module.exports = { executeCode };
+module.exports = executeCode;
