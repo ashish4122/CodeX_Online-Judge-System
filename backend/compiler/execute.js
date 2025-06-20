@@ -8,7 +8,11 @@ if(!fs.existsSync(outputPath)) {
     fs.mkdirSync(outputPath, { recursive: true });
 }
 
-const executeCode = (filepath) => {
+const executeCode = (filepath, inputPath) => {
+    console.log(filepath);
+    if (typeof filepath !== 'string') {
+        throw new TypeError('The "filepath" argument must be a string');
+    }
     const jobId = path.basename(filepath).split('.')[0];
     const outPath = path.join(outputPath, `${jobId}.out`);
     return new Promise((resolve, reject) => {
@@ -16,10 +20,9 @@ const executeCode = (filepath) => {
         let command = '';
         
         if (ext === '.cpp') {
-            const output = filepath.replace('.cpp', '');
-            command = `g++ "${filepath}" -o "${output}" && "${output}"`;
+            const exePath = path.join(outputPath, `${jobId}.exe`);
+            command = `g++ "${filepath}" -o "${exePath}" && "${exePath}" < "${inputPath}"`;
         } else if (ext === '.java') {
-            // For Java 11+, we can run .java files directly
             command = `java "${filepath}"`;
         } else if (ext === '.py') {
             command = `python3 "${filepath}"`;

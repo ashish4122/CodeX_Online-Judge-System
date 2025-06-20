@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../utils';
+import axios from 'axios'; // <-- Add this import
 
 function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,9 +18,15 @@ function AuthPage() {
     setAuthInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleModeSwitch = () => {
+    setIsLogin((prev) => !prev);
+    setAuthInfo({ name: '', email: '', password: '' });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password } = authInfo;
+    console.log(`name ${name}, email ${email}`);
 
     if (!email || !password || (!isLogin && !name)) {
       return handleError('All fields are required');
@@ -30,21 +37,27 @@ function AuthPage() {
         ? 'http://localhost:8000/auth/login'
         : 'http://localhost:8000/auth/signup';
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(authInfo)
+      // Only send required fields
+      const payload = isLogin
+        ? { email, password }
+        : { name, email, password };
+
+      const { data: result } = await axios.post(url, payload, {
+        headers: { 'Content-Type': 'application/json' }
       });
 
-      const result = await response.json();
       const { success, message, jwtToken, name: userName, error } = result;
 
       if (success) {
         handleSuccess(message);
         if (isLogin) {
-          localStorage.setItem('token', jwtToken);
-          localStorage.setItem('loggedInUser', userName);
-          setTimeout(() => navigate('/home'), 1000);
+          if (jwtToken && userName) {
+            localStorage.setItem('token', jwtToken);
+            localStorage.setItem('loggedInUser', userName);
+            setTimeout(() => navigate('/problem'), 1000);
+          } else {
+            handleError('Invalid login response');
+          }
         } else {
           setTimeout(() => setIsLogin(true), 1000);
         }
@@ -52,10 +65,10 @@ function AuthPage() {
         const details = error?.details?.[0]?.message || error;
         handleError(details);
       } else {
-        handleError(message);
+        handleError(message || 'Authentication failed');
       }
     } catch (err) {
-      handleError(err.message || 'Something went wrong');
+      handleError(err.response?.data?.message || err.message || 'Something went wrong');
     }
   };
 
@@ -108,7 +121,6 @@ function AuthPage() {
                   value={authInfo.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent transition-all duration-200 hover:border-gray-600"
-                  autoFocus
                   required
                 />
               </div>
@@ -159,7 +171,7 @@ function AuthPage() {
               {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
               <button
                 type="button"
-                onClick={() => setIsLogin(!isLogin)}
+                onClick={handleModeSwitch}
                 className="text-white hover:text-gray-300 font-medium underline underline-offset-2 transition-colors duration-200"
               >
                 {isLogin ? 'Sign Up' : 'Sign In'}

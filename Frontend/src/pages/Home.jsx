@@ -38,7 +38,7 @@ int main() {
     };
 
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      const backendUrl = `${import.meta.env.VITE_BACKEND_URL}/problems/run`;
       const { data } = await axios.post(backendUrl, payload);
       setOutput(data.output);
     } catch (error) {

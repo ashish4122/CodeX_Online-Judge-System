@@ -1,8 +1,9 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import Home from "./pages/Home";
-import Problem from "./pages/Problem";
+import ProblemHome from "./pages/problemhome";
 import { useState } from "react";
+import ProblemDetails from "./pages/ProblemDetails";
 import RefreshHandler from './RefreshHandler';
 
 function App() {
@@ -13,8 +14,9 @@ function App() {
       <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/home" element={<Home />} /> {/* ← no PrivateRoute */}
-        <Route path="/problem" element={<Problem />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/problem" element={<ProblemHome />} /> {/* Problem list page */}
+        <Route path="/problems/:id" element={<ProblemDetails />} />
         <Route path="*" element={<Navigate to="/auth" />} />
       </Routes>
     </>

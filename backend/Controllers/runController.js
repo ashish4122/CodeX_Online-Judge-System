@@ -21,7 +21,7 @@ const runCode = async (req, res) => {
       const inputPath = await generateInputFile(example.input);
 
       try {
-        const output = await executeCode({ filePath, inputPath });
+        const output = await executeCode(filePath); // <-- FIXED
 
         results.push({
           input: example.input,
@@ -73,7 +73,7 @@ const submitCode = async (req, res) => {
       const inputPath = await generateInputFile(testCase.input);
 
       try {
-        const result = await executeCode({ filePath, inputPath });
+        const result = await executeCode(filePath); // <-- FIXED
 
         results.push({
           input: testCase.input,
@@ -114,7 +114,7 @@ const runCustomInput = async (req, res) => {
     const filePath = await generateFile(language, code);
     const inputPath = await generateInputFile(input);
 
-    const output = await executeCode({ filePath, inputPath });
+    const output = await executeCode(filePath, inputPath);
 
     return res.status(201).json({
       success: true,
