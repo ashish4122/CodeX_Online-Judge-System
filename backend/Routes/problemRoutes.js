@@ -10,7 +10,6 @@ router.post("/", problemController.createProblem);
 router.put("/:id", problemController.updateProblem);
 router.delete("/:id", problemController.deleteProblem);
 router.post("/run", runController.runCustomInput);
-router.post("/:id/run", runController.runCode);
-router.post("/:id/submit", runController.submitCode);
+
 
 module.exports = router;

@@ -1,0 +1,5 @@
+# Sample Python program to add two numbers
+num1 = int(input())
+num2 = int(input())
+sum = num1 + num2
+print("The sum of the two numbers is:", sum)

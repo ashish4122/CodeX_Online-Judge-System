@@ -14,11 +14,29 @@ exports.getAllProblems = async (req, res) => {
 // GET single problem
 exports.getProblemById = async (req, res) => {
   try {
+    console.log('Fetching problem with ID:', req.params.id);
+    
     const problem = await Problem.findById(req.params.id);
-    if (!problem) return res.status(404).json({ message: "Problem not found" });
-    res.json(problem);
+    
+    if (!problem) {
+      return res.status(404).json({ 
+        message: "Problem not found",
+        success: false 
+      });
+    }
+    
+    // Return the problem in the format your React component expects
+    res.json({ 
+      success: true,
+      problem: problem  // WRAP IT IN A PROBLEM OBJECT
+    });
+    
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error in getProblemById:', err);
+    res.status(500).json({ 
+      error: err.message,
+      success: false 
+    });
   }
 };
 
