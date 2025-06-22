@@ -73,7 +73,7 @@ const submitCode = async (req, res) => {
       const inputPath = await generateInputFile(testCase.input);
 
       try {
-        const result = await executeCode(filePath); // <-- FIXED
+        const result = await executeCode(filePath, inputPath); // <-- Pass inputPath!
 
         results.push({
           input: testCase.input,

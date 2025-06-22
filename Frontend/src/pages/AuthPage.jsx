@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../utils';
 import axios from 'axios'; // <-- Add this import
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,8 +28,6 @@ function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password } = authInfo;
-    console.log(`name ${name}, email ${email}`);
-
     if (!email || !password || (!isLogin && !name)) {
       return handleError('All fields are required');
     }
@@ -37,7 +37,6 @@ function AuthPage() {
         ? 'http://localhost:8000/auth/login'
         : 'http://localhost:8000/auth/signup';
 
-      // Only send required fields
       const payload = isLogin
         ? { email, password }
         : { name, email, password };
@@ -49,7 +48,8 @@ function AuthPage() {
       const { success, message, jwtToken, name: userName, error } = result;
 
       if (success) {
-        handleSuccess(message);
+        toast.success(isLogin ? 'Login successful' : 'Signup successful');
+        // handleSuccess(message); // <-- Remove or comment out this line
         if (isLogin) {
           if (jwtToken && userName) {
             localStorage.setItem('token', jwtToken);
@@ -68,7 +68,23 @@ function AuthPage() {
         handleError(message || 'Authentication failed');
       }
     } catch (err) {
-      handleError(err.response?.data?.message || err.message || 'Something went wrong');
+      const backendMsg =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message ||
+        'Something went wrong';
+
+      if (
+        isLogin &&
+        (
+          (err.response && err.response.status === 403) ||
+          (backendMsg && backendMsg.toLowerCase().includes('user does not exist'))
+        )
+      ) {
+        toast.error('User does not exist');
+      } else {
+        handleError(backendMsg);
+      }
     }
   };
 
@@ -88,9 +104,44 @@ function AuthPage() {
           <h1 className="text-4xl font-bold text-white mb-2">
             Code<span className="text-gray-400">X</span>
           </h1>
-          <p className="text-gray-400 text-sm">
-            {isLogin ? 'Welcome back to CodeX' : 'Join the CodeX community'}
-          </p>
+          <span className="text-gray-400 text-lg font-semibold flex justify-center items-center gap-1">
+            {/* Horizontally broken "BreaK THE LIMITS" */}
+            <span className="relative inline-block align-middle" style={{ width: '240px', height: '1.2em' }}>
+              {/* Top half */}
+              <span
+                className="absolute left-0 top-0 w-full text-blue-400 font-bold italic"
+                style={{
+                  clipPath: 'inset(0 0 48% 0)',
+                  fontSize: '1.1rem',
+                  letterSpacing: '0.13em',
+                  lineHeight: '1',
+                  height: '1em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                BreaK THE LIMITS
+              </span>
+              {/* Bottom half, directly below, not shifted */}
+              <span
+                className="absolute left-0"
+                style={{
+                  top: '0.11em', // vertical gap for the break
+                  width: '100%',
+                  color: '#7dd3fc', // tailwind blue-300
+                  fontWeight: 700,
+                  fontStyle: 'italic',
+                  clipPath: 'inset(52% 0 0 0)',
+                  fontSize: '1.1rem',
+                  letterSpacing: '0.13em',
+                  lineHeight: '1',
+                  height: '1em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                BreaK THE LIMITS
+              </span>
+            </span>
+          </span>
         </div>
 
         {/* Auth Card */}
@@ -187,6 +238,8 @@ function AuthPage() {
           </p>
         </div>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
