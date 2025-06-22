@@ -12,7 +12,8 @@ function ProblemsHome() {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/problems');
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await axios.get(`${backendUrl}/problems`);
         setProblems(res.data.problems || []);
       } catch (err) {
         setProblems([]);

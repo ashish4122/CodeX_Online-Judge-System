@@ -33,9 +33,10 @@ function AuthPage() {
     }
 
     try {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
       const url = isLogin
-        ? 'http://localhost:8000/auth/login'
-        : 'http://localhost:8000/auth/signup';
+        ? `${backendUrl}/auth/login`
+        : `${backendUrl}/auth/signup`;
 
       const payload = isLogin
         ? { email, password }

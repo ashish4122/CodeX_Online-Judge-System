@@ -85,7 +85,7 @@ function ProblemDetails() {
           setLoading(false);
           return;
         }
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const res = await axios.get(`${backendUrl}/problems/${id}`);
         setProblem(res.data.problem || res.data);
         setError(null);
@@ -121,7 +121,7 @@ function ProblemDetails() {
         code,
         input,
       };
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
       const { data } = await axios.post(`${backendUrl}/problems/run`, payload);
       setOutput(data.output);
     } catch (error) {
@@ -143,7 +143,7 @@ function ProblemDetails() {
     setAiReview('');
     try {
       const payload = { code };
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
       const { data } = await axios.post(`${backendUrl}/ai-review`, payload);
       setAiReview(data.review);
     } catch (error) {
@@ -157,12 +157,11 @@ function ProblemDetails() {
   const handleSubmit = async () => {
     try {
       setOutput('');
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
       const payload = {
         language,
         code,
       };
-      // Note the endpoint: /problems/:id/submit
       const { data } = await axios.post(`${backendUrl}/problems/${id}/submit`, payload);
       setOutput(
         data.results
