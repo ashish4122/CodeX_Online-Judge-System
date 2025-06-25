@@ -12,6 +12,13 @@ dbConnection();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
+
 app.use("/auth",require("./Routes/AuthRouter"));
 app.use("/problems" , require("./Routes/problemRoutes"));
 
