@@ -1,47 +1,60 @@
-CodeX-Online Judge System
-A web-based coding platform where users can solve problems, submit code, and receive verdicts like Accepted, Wrong Answer, TLE, etc. Code is executed securely using isolated Docker containers.
+# 💻 CodeX - Online Judge System
 
-🚀 Features
-👤 Users
-Register & Login
+A **web-based coding platform** where users can solve programming problems, submit code, and receive verdicts like `Accepted`, `Wrong Answer`, `Time Limit Exceeded`, etc.  
+Code is executed **securely in isolated Docker containers** to ensure accurate and safe evaluations.
 
-Browse and solve coding problems
+---
 
-Submit code in C++, Java, or Python
+## 🚀 Features
 
-View verdicts
+### 👤 User Features
+- Register & Login
+- Browse and solve coding problems
+- Submit code in **C++, Java, or Python**
+- View verdicts for each submission (`Accepted`, `WA`, `TLE`, etc.)
 
+---
 
-🧱 Tech Stack
-Frontend: React.js, Axios, React Router
+## 🧱 Tech Stack
 
-Backend: Node.js, Express.js
+| Layer     | Technology             |
+|-----------|------------------------|
+| Frontend  | React.js, Axios, React Router |
+| Backend   | Node.js, Express.js    |
+| Database  | MongoDB                |
+| Execution | Docker (Sandbox)       |
+| Hosting   | AWS (EC2/S3/Nginx)     |
 
-Database: MongoDB
+---
 
-Code Execution: Docker sandbox
-
-Deployment: AWS
-
-Architecture Overview
+## 🏗️ Architecture Overview
 
 [React Frontend] ⇄ [Express Backend] ⇄ [MongoDB]
                              ⇣
                  [Docker Execution Engine]
 
-🔧 Backend API Summary
-Auth: /register, /login, /logout
 
-Problems: GET /problems, GET /problems/:id, POST /admin/problem
+---
 
-Submissions: POST /submit, GET /submissions/:userId, GET /submission/:id
+## 🔧 Backend API Summary
 
-🔄 Data Flow
-User selects a problem → frontend fetches details
+### 🔐 Authentication
+- `POST /signup` – Register a new user  
+- `POST /login` – Login with credentials  
 
-User writes & submits code → sent to backend
+### 📚 Problems
+- `GET /problems` – List all problems  
+- `GET /problems/:id` – Get problem details  
 
-Backend runs code in Docker & checks output
+### 📝 Submissions
+- `POST /submit` – Submit solution code  
+---
 
-Verdict stored in DB → shown to user
+## 🔄 Data Flow
+
+1. **User selects a problem** → frontend fetches problem details  
+2. **User writes & submits code** → code sent to backend  
+3. **Backend runs code** inside Docker with time/memory limits  
+4. **Output is compared** to expected results  
+5. **Verdict stored** in MongoDB → returned to user in UI
 
