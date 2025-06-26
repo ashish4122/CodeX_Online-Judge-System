@@ -29,9 +29,8 @@ Code is executed **securely in isolated Docker containers** to ensure accurate a
 
 ## 🏗️ Architecture Overview
 
-[React Frontend] ⇄ [Express Backend] ⇄ [MongoDB]
-                             ⇣
-                 [Docker Execution Engine]
+![image](https://github.com/user-attachments/assets/7abc273b-4423-4b5f-abff-e8cb2c1a2ea2)
+
 
 
 ---
