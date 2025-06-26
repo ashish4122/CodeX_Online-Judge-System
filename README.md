@@ -1,6 +1,6 @@
 # 💻 CodeX - Online Judge System
 
-A **web-based coding platform** where users can solve programming problems, submit code, and receive verdicts like `Accepted`, `Wrong Answer`, `Time Limit Exceeded`, etc.  
+A **web-based coding platform** where users can solve programming problems, submit code, and receive verdicts like `Accepted`, `Wrong Answer` etc.  
 Code is executed **securely in isolated Docker containers** to ensure accurate and safe evaluations.
 
 ---
@@ -54,6 +54,5 @@ Code is executed **securely in isolated Docker containers** to ensure accurate a
 1. **User selects a problem** → frontend fetches problem details  
 2. **User writes & submits code** → code sent to backend  
 3. **Backend runs code** inside Docker with time/memory limits  
-4. **Output is compared** to expected results  
-5. **Verdict stored** in MongoDB → returned to user in UI
+4. **Output is compared** to expected results and shown to user
 
